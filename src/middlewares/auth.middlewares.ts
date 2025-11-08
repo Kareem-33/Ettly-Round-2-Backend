@@ -1,11 +1,11 @@
 import type { NextFunction, Response } from "express";
 import { ExtendedRequest } from "../modules/user/user.controller.js";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import User, { type IUser } from "../modules/user/user.model.js";
 import mongoose from "mongoose";
 
-dotenv.config();
+// dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 

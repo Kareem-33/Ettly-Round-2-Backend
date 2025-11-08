@@ -1,9 +1,9 @@
 import { type Response } from "express";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-dotenv.config();
+// dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 

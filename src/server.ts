@@ -1,5 +1,5 @@
 import express from 'express';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -7,7 +7,7 @@ import { connectDB } from './config/db.js';
 import userRouter from './modules/user/user.routes.js';
 import calculationRouter from './modules/calculation/calculation.routes.js';
 
-dotenv.config();
+// dotenv.config();
 const app = express();
 
 app.use(express.json());
