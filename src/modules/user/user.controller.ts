@@ -11,12 +11,12 @@ export interface ExtendedRequest extends Request {
 export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
-    if(!username || !email || !password) {
-      return res.status(400).json({message: "All fields are required"});
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
-    const existingUser = await User.findOne({ $or: [{username}, {email}] });
-    if(existingUser) {
-      return res.status(409).json({message: "Username or email already in use"});
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res.status(409).json({ message: "Username or email already in use" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser: IUser = new User({ username, email, password: hashedPassword });
@@ -31,23 +31,23 @@ export const register = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error registering user:", error);
-    return res.status(500).json({message: "Internal server error"});
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const {email, password} = req.body;
-    if(!email || !password) {
-      return res.status(400).json({message: "Email and password are required"});
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
     }
-    const user = await User.findOne({email});
-    if(!user) {
-      return res.status(401).json({message: "Invalid email or password"});
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if(!isPasswordValid) {
-      return res.status(401).json({message: "Invalid email or password"});
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = generateJWT(user._id as mongoose.Types.ObjectId, res);
@@ -59,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error logging in user:", error);
-    return res.status(500).json({message: "Internal server error"});
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -69,12 +69,11 @@ export const logout = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      domain: process.env.NODE_ENV === 'production' ? '.yourdomain.com' : undefined
     });
-    return res.status(200).json({message: "User logged out successfully"});
+    return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     console.error("Error logging out user:", error);
-    return res.status(500).json({message: "Internal server error"});
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -91,6 +90,6 @@ export const getProfile = async (req: ExtendedRequest, res: Response) => {
     });
   } catch (error) {
     console.error("Error getting user profile:", error);
-    return res.status(500).json({message: "Internal server error"});
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
