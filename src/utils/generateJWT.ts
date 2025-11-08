@@ -5,7 +5,13 @@ import mongoose from "mongoose";
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
+// For security, it's better to crash if the secret is missing
+// than to use a default one.
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("FATAL ERROR: JWT_SECRET is not defined.");
+  process.exit(1);
+}
 
 export const generateJWT = (userId: mongoose.Types.ObjectId, res: Response) => {
   const token = jwt.sign({userId}, JWT_SECRET, {expiresIn: '7d'});
@@ -14,8 +20,7 @@ export const generateJWT = (userId: mongoose.Types.ObjectId, res: Response) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    domain: process.env.NODE_ENV === 'production' ? '.yourdomain.com' : undefined
+    maxAge: 7 * 24 * 60 * 60 * 1000
   });
 
   return token;
